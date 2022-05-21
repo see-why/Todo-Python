@@ -4,9 +4,15 @@
         <title>
             To-do App
         </title>
+        <style>
+            .hidden {
+                display: none;
+            }
+        </style>
     </head>
     <body>
         <section>
+            <div class = "hidden" id = "error" style="display:none;"> Something went wrong! </div>
             <div>
                 <h1>To-dos</h1>
                 <div id="todos">
@@ -27,11 +33,11 @@
         <script>
             document.getElementById('form').onsubmit = (e) => {
                 e.preventDefault();
-                fetch('/create', {
+                fetch('/create_with_json', {
                     method: 'POST',
                     body: JSON.stringify({
                         'title': document.getElementById('title').value,
-                        'description': document.getElementById('description')
+                        'description': document.getElementById('description').value
                     }),
                     headers: {
                         'Content-Type': 'application/json'
