@@ -12,7 +12,7 @@
     </head>
     <body>
         <section>
-            <div class = "hidden" id = "error" style="display:none;"> Something went wrong! </div>
+            <div class = "hidden" id = "error"> Something went wrong! </div>
             <div>
                 <h1>To-dos</h1>
                 <div id="todos">
@@ -58,8 +58,8 @@
 
                     div.appendChild(ul)
 
-                }).catch((error) => {
-                    console.log(error)
+                }).catch((error) => {      
+                    console.log(error)              
                     document.getElementById('error').className='';
                 });
             }
