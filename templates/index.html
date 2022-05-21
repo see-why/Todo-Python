@@ -5,20 +5,60 @@
             To-do App
         </title>
     </head>
-    <section>
-        <div>
-            <h1>To-dos</h1>
-            {% for d in data %}
-            <ul>
-                <ol>{{d.title}}</ol>
-                <li>{{d.description}}</li>
-            </ul>           
-            {% endfor %}
-        </div>
-    </section>
-    <form action="/create" method="post">
-        <input type="text" name="title"/>
-        <input type="text" name="description"/>
-        <input type="submit" value="Save"/>
-    </form>
+    <body>
+        <section>
+            <div>
+                <h1>To-dos</h1>
+                <div id="todos">
+                    {% for d in data %}
+                    <ul>
+                        <ol>{{d.title}}</ol>
+                        <li>{{d.description}}</li>
+                    </ul>           
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        <form id="form" action="/create" method="post">
+            <input type="text" id="title" name="title"/>
+            <input type="text" id="description" name="description"/>
+            <input type="submit" value="Save"/>
+        </form>
+        <script>
+            document.getElementById('form').onsubmit = (e) => {
+                e.preventDefault();
+                fetch('/create', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        'title': document.getElementById('title').value,
+                        'description': document.getElementById('description')
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then((response) => {
+                    return response.json()
+                }).then((jsonResponse) => {
+                    console.log(jsonResponse)
+                    div = document.getElementById('todos')
+                    ul = document.createElement('ul')
+                    ol = document.createElement('ol')
+                    li = document.createElement('li')
+
+                    ol.innerHTML = jsonResponse['title']
+                    li.innerHTML = jsonResponse['description']
+
+                    ul.append(ol,li)
+
+                    div.appendChild(ul)
+
+                }).catch((error) => {
+                    console.log(error)
+                });
+            }
+            
+        </script>
+    </body>
+    </html>       
+   
 </html>
