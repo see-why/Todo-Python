@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            To-do App
+        </title>
+    </head>
+    <section>
+        <div>
+            <h1>To-dos</h1>
+            {% for d in data %}
+            <ul>
+                <ol>{{d.title}}</ol>
+                <li>{{d.description}}</li>
+            </ul>           
+            {% endfor %}
+        </div>
+    </section>
+    <form action="/create" method="post">
+
+    </form>
+</html>
