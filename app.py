@@ -1,4 +1,5 @@
-from flask import Flask, redirect, render_template, request, url_for
+from subprocess import CREATE_NEW_CONSOLE
+from flask import Flask, jsonify, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -33,7 +34,20 @@ def createTodo():
 
     return redirect(url_for('index'))
 
+@app.route('/create_with_json', methods=['POST'])
+def create_Todo():
+    print(f'request: {request.get_json()}')
+    title = request.get_json()['title']
+    description = request.get_json()['description']
 
+    todo = Todo(title=title, description=description)
+    db.session.add(todo)
+    db.session.commit()
+
+    return jsonify({
+        'title': todo.title,
+        'description': todo.description
+    })
 
 
 if __name__ == '__main__':
