@@ -25,7 +25,7 @@
                     {% for d in data %}
                     <ul>                        
                         <ol>{{d.title}}</ol>
-                        <li> <input class="check-completed" type="checkbox" {% if d.completed %} checked {% endif %} /> {{d.description }}</li>
+                        <li> <input class="check-completed" data-id="{{d.id}}" type="checkbox" {% if d.completed %} checked {% endif %} /> {{d.description }}</li>
                     </ul>           
                     {% endfor %}
                 </div>
@@ -39,21 +39,30 @@
         <script>
             todos = document.querySelectorAll('.check-completed')
             
-            for (var t of todos) {
+            for (var i=0; i<todos.length; i++){
+                    t = todos[i]
+                    
                     t.onchange = (e) => {
-                    const check = e.target.checked
+                        const checkbox = e.target
+                        const check = checkbox.checked                        
+                        console.log('id',checkbox.dataset['id'])
 
-                    fetch('/set-completed', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            'completed': check
-                        }),
-                        headers: {
-                            'Content-Type': 'application/json'
-                        } 
-                    })
+                        fetch(`${checkbox.dataset['id']}/set-completed`, {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                'completed': check
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            } 
+                        }).then(function() {
+                          document.getElementById('error').className = 'hidden';
+                        })
+                        .catch(function() {
+                          document.getElementById('error').className = '';
+                        })
+                    }
                 }
-            }
 
 
             document.getElementById('form').onsubmit = (e) => {
