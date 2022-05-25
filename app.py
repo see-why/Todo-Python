@@ -55,12 +55,13 @@ def create_Todo():
     error = False
     body = {}
     try:
-        todo = Todo(title=title, description=description)
+        todo = Todo(title=title, description=description, parent_list_id=1)
         db.session.add(todo)
         db.session.commit()
         body = {
             'id': todo.id,
             'title': todo.title,
+            'checked': todo.completed,
             'description': todo.description
         }
     except:

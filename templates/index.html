@@ -110,9 +110,24 @@
                     li = document.createElement('li')
 
                     ol.innerHTML = jsonResponse['title']
-                    li.innerHTML = jsonResponse['description']
+                    input = document.createElement('input')
+                    input.type = 'checkbox'
+                    input.className = 'check-completed'
+                    input.dataset['id'] = jsonResponse['id']
+                    input.checked = jsonResponse['checked']
 
-                    ul.append(ol,li)
+                    li.appendChild(input)
+                    li.innerHTML += ` ${jsonResponse['description']}`
+                    last_li = document.createElement('li')
+                    button = document.createElement('button')
+                    button.innerHTML = '&cross;'
+                    button.dataset['id'] = jsonResponse['id']
+                    button.className = 'delete-button'
+                    button.Type = 'button'
+
+                    last_li.appendChild(button)
+
+                    ul.append(ol,li,last_li)
 
                     div.appendChild(ul)
 
