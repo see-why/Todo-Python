@@ -90,7 +90,7 @@ def delete_todo(todo_id):
     db.session.rollback()
   finally:
     db.session.close()
-  return redirect(url_for('index'))
+  return jsonify({'Success': True})
     
 
 if __name__ == '__main__':
