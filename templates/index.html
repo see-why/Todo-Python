@@ -51,6 +51,7 @@
                         method: 'DELETE'                       
                     }).then(() => {
                           document.getElementById('error').className = 'hidden';
+                          window.location.reload();
                         })
                         .catch((error) => {
                           document.getElementById('error').className = '';
