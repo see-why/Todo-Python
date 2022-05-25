@@ -80,7 +80,7 @@ def set_completed_todo(todo_id):
     db.session.close()
   return redirect(url_for('index'))
 
-@app.route('/<todo_id>/delete-todo', methods=['DELETE'])
+@app.route('/todos/<todo_id>', methods=['DELETE'])
 def delete_todo(todo_id):
   try:   
     todo = Todo.query.get(todo_id)
