@@ -47,7 +47,7 @@
                     const button = e.target
                     const id = button.dataset['id']
 
-                    fetch(`${id}/delete-todo`, {
+                    fetch(`/todos/${id}`, {
                         method: 'DELETE'                       
                     }).then(() => {
                           document.getElementById('error').className = 'hidden';
