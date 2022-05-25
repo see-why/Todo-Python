@@ -26,6 +26,7 @@
                     <ul>                        
                         <ol>{{d.title}}</ol>
                         <li> <input class="check-completed" data-id="{{d.id}}" type="checkbox" {% if d.completed %} checked {% endif %} /> {{d.description }}</li>
+                        <button id="delete-button">&cross;</button>
                     </ul>           
                     {% endfor %}
                 </div>
