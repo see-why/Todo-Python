@@ -17,9 +17,9 @@
                 <h1>To-dos</h1>
                 <div id="todos">
                     {% for d in data %}
-                    <ul>
+                    <ul>                        
                         <ol>{{d.title}}</ol>
-                        <li>{{d.description}}</li>
+                        <li> <input type="checkbox" {% if d.completed %} checked {% endif %} /> {{d.description }}</li>
                     </ul>           
                     {% endfor %}
                 </div>
