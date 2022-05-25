@@ -52,7 +52,13 @@
                         headers: {
                             'Content-Type': 'application/json'
                         }
-                    })
+                    }).then(() => {
+                          document.getElementById('error').className = 'hidden';
+                        })
+                        .catch((error) => {
+                          document.getElementById('error').className = '';
+                          console.log(error)
+                        })
                 }
             }
 
@@ -74,11 +80,12 @@
                             headers: {
                                 'Content-Type': 'application/json'
                             } 
-                        }).then(function() {
+                        }).then(() => {
                           document.getElementById('error').className = 'hidden';
                         })
-                        .catch(function() {
+                        .catch((error) => {
                           document.getElementById('error').className = '';
+                          console.log(error)
                         })
                     }
                 }
