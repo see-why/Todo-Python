@@ -17,26 +17,52 @@
         </style>
     </head>
     <body>
-        <section>
+        <section id="todolist_section">
+            <div>
+           <div class = "hidden" id = "error"> Something went wrong! </div>
+           <div>
+               <h1>To-do Lists</h1>
+               <div id="todos">
+                   {% for todolist in todolists %}
+                   <ul>                        
+                       <ol>{{todolist.name}}</ol>
+                       <li> <input class="check-list-completed" data-id="{{todolist.id}}" type="checkbox" {% if todolist.completed %} checked {% endif %} /></li>
+                       <li><button type="button" data-id="{{todolist.id}}" class="delete-list-button">&cross;</button></li>
+                   </ul>           
+                   {% endfor %}
+               </div>
+           </div>
+            </div>
+            <form id="form" action="/create/list" method="post">
+               <input type="text" id="name" name="title"/>               
+               <input type="submit" value="Save"/>
+           </form>
+       </section>      
+     
+        <section id="todos_section">
+             <div>
             <div class = "hidden" id = "error"> Something went wrong! </div>
             <div>
                 <h1>To-dos</h1>
                 <div id="todos">
-                    {% for d in data %}
+                    <h2>{{active}}</h2>
+                    {% for todo in todos %}
                     <ul>                        
-                        <ol>{{d.title}}</ol>
-                        <li> <input class="check-completed" data-id="{{d.id}}" type="checkbox" {% if d.completed %} checked {% endif %} /> {{d.description }}</li>
-                        <li><button type="button" data-id="{{d.id}}" class="delete-button">&cross;</button></li>
+                        <ol>{{todo.title}}</ol>
+                        <li> <input class="check-completed" data-id="{{todo.id}}" type="checkbox" {% if todo.completed %} checked {% endif %} /> {{todo.description }}</li>
+                        <li><button type="button" data-id="{{todo.id}}" class="delete-button">&cross;</button></li>
                     </ul>           
                     {% endfor %}
                 </div>
             </div>
-        </section>
-        <form id="form" action="/create" method="post">
-            <input type="text" id="title" name="title"/>
-            <input type="text" id="description" name="description"/>
-            <input type="submit" value="Save"/>
-        </form>
+             </div>
+             <form id="form" action="/create" method="post">
+                <input type="text" id="title" name="title"/>
+                <input type="text" id="description" name="description"/>
+                <input type="submit" value="Save"/>
+            </form>
+        </section>      
+      
         <script>
             buttons = document.querySelectorAll('.delete-button');
 
