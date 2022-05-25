@@ -16,10 +16,16 @@ class Todo(db.Model):
     title = db.Column(db.String(), nullable=False)
     description = db.Column(db.String(), nullable=False)
     completed = db.Column(db.Boolean, nullable=False, default=False)
+    parent_list_id = db.Column(db.Integer, db.ForeignKey("todolists.id"))
 
     def __repr__(self):
         return f'Todo Title: {self.title} Description: {self.description}'
 
+class TodoList(db.Model):
+    __tablename__ = 'todolists'
+    id = db.Column(db.Integer, primary_key=True)
+    name =  db.Column(db.String(), nullable=False)
+    todos = db.relationship('Todo', backref='parent_list', lazy='True')
 
 # db.create_all()
 
