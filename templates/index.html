@@ -47,7 +47,7 @@
                     const button = e.target
                     const id = button.dataset['id']
 
-                    fetch(`${id}/delete-todos`, {
+                    fetch(`${id}/delete-todo`, {
                         method: 'DELETE',
                         headers: {
                             'Content-Type': 'application/json'
