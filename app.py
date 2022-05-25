@@ -25,7 +25,7 @@ class TodoList(db.Model):
     __tablename__ = 'todolists'
     id = db.Column(db.Integer, primary_key=True)
     name =  db.Column(db.String(), nullable=False)
-    todos = db.relationship('Todo', backref='parent_list', lazy='True')
+    todos = db.relationship('Todo', backref='parent_list', lazy=True)
 
     def __repr__(self):
         return f'TodoList Name: {self.name} Todos: {self.todos}'
@@ -59,6 +59,7 @@ def create_Todo():
         db.session.add(todo)
         db.session.commit()
         body = {
+            'id': todo.id,
             'title': todo.title,
             'description': todo.description
         }
