@@ -48,10 +48,7 @@
                     const id = button.dataset['id']
 
                     fetch(`${id}/delete-todo`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        }
+                        method: 'DELETE'                       
                     }).then(() => {
                           document.getElementById('error').className = 'hidden';
                         })
