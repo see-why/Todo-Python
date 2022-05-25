@@ -38,6 +38,24 @@
             <input type="submit" value="Save"/>
         </form>
         <script>
+            buttons = document.querySelectorAll('.delete-button');
+
+            for (var i = 0; i < buttons.length; i++){
+                b = buttons[i];
+
+                b.onclick = (e) => {
+                    const button = e.target
+                    const id = button.dataset['id']
+
+                    fetch(`${id}/delete-todos`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                }
+            }
+
             todos = document.querySelectorAll('.check-completed')
             
             for (var i=0; i<todos.length; i++){
