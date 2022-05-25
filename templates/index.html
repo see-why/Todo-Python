@@ -40,10 +40,7 @@
         <script>
             buttons = document.querySelectorAll('.delete-button');
 
-            for (var i = 0; i < buttons.length; i++){
-                b = buttons[i];
-
-                b.onclick = (e) => {
+            const delete_function = (e) => {
                     const button = e.target
                     const id = button.dataset['id']
 
@@ -57,16 +54,18 @@
                           document.getElementById('error').className = '';
                           console.log(error)
                         })
+            }
+
+            for (var i = 0; i < buttons.length; i++){
+                b = buttons[i];
+
+                b.onclick = (e) => {
+                    delete_function(e)
                 }
             }
 
-            todos = document.querySelectorAll('.check-completed')
-            
-            for (var i=0; i<todos.length; i++){
-                    t = todos[i]
-                    
-                    t.onchange = (e) => {
-                        const checkbox = e.target
+            const update_Completed = (e) => {
+                const checkbox = e.target
                         const check = checkbox.checked                        
                         console.log('id',checkbox.dataset['id'])
 
@@ -85,6 +84,15 @@
                           document.getElementById('error').className = '';
                           console.log(error)
                         })
+            }
+
+            todos = document.querySelectorAll('.check-completed')
+            
+            for (var i=0; i<todos.length; i++){
+                    t = todos[i]
+                    
+                    t.onchange = (e) => {
+                       update_Completed(e)
                     }
                 }
 
@@ -116,6 +124,8 @@
                     input.dataset['id'] = jsonResponse['id']
                     input.checked = jsonResponse['checked']
 
+                    input.onchange = update_Completed(e)
+
                     li.appendChild(input)
                     li.innerHTML += ` ${jsonResponse['description']}`
                     last_li = document.createElement('li')
@@ -124,6 +134,8 @@
                     button.dataset['id'] = jsonResponse['id']
                     button.className = 'delete-button'
                     button.Type = 'button'
+
+                    button.onclick = delete_function(e)
 
                     last_li.appendChild(button)
 
