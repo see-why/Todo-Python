@@ -124,11 +124,37 @@ def set_completed_todo(todo_id):
     db.session.close()
   return redirect(url_for('index'))
 
+@app.route('/<todolist_id>/set-completed-list', methods=['POST'])
+def set_completed_todo(todolist_id):
+  try:
+    completed = request.get_json()['completed']
+    print('completed', completed)
+    todoList = TodoList.query.get(todolist_id)
+    todoList.completed = completed
+    db.session.commit()
+  except:
+    db.session.rollback()
+  finally:
+    db.session.close()
+  return redirect(url_for('index'))
+
 @app.route('/todos/<todo_id>', methods=['DELETE'])
 def delete_todo(todo_id):
   try:   
     todo = Todo.query.get(todo_id)
     db.session.delete(todo)
+    db.session.commit()
+  except:
+    db.session.rollback()
+  finally:
+    db.session.close()
+  return jsonify({'Success': True})
+
+@app.route('/todolists/<todolist_id>', methods=['DELETE'])
+def delete_todo(todolist_id):
+  try:   
+    todoList = TodoList.query.get(todolist_id)
+    db.session.delete(todoList)
     db.session.commit()
   except:
     db.session.rollback()
