@@ -5,8 +5,20 @@
             To-do App
         </title>
         <style>
+            .todolist_section {
+                margin-right: 10%;
+            }
+
             .hidden {
                 display: none;
+            }
+
+            body {
+                display: flex;
+            }
+
+            a {
+                text-decoration: none;
             }
 
             ul {
@@ -14,10 +26,15 @@
                 padding:0;
                 margin: 0;
             }
+
+            li button {
+                color: #ff0000;
+                cursor: pointer;
+            }
         </style>
     </head>
     <body>
-        <section id="todolist_section">
+        <section id="todolist_section" class="todolist_section">
             <div>
            <div class = "hidden" id = "error"> Something went wrong! </div>
            <div>
@@ -25,7 +42,7 @@
                <div id="todos">
                    {% for todolist in todolists %}
                    <ul>                        
-                       <ol>{{todolist.name}}</ol>
+                       <ol><a href="/{{todolist.id}}">{{todolist.name}}</a></ol>
                        <li> <input class="check-list-completed" data-id="{{todolist.id}}" type="checkbox" {% if todolist.completed %} checked {% endif %} /></li>
                        <li><button type="button" data-id="{{todolist.id}}" class="delete-list-button">&cross;</button></li>
                    </ul>           
@@ -39,13 +56,13 @@
            </form>
        </section>      
      
-        <section id="todos_section">
+        <section id="todos_section" class="todolist_section">
              <div>
             <div class = "hidden" id = "error"> Something went wrong! </div>
             <div>
                 <h1>To-dos</h1>
-                <div id="todos">
-                    <h2>{{active}}</h2>
+                <h2 data-id="{{active_list.id}}" id="parent=list-h2">{{active_list.name}}</h2>
+                <div id="todos">                   
                     {% for todo in todos %}
                     <ul>                        
                         <ol>{{todo.title}}</ol>
