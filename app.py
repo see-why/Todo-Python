@@ -59,11 +59,12 @@ def createTodo():
 def create_Todo():
     title = request.get_json()['title']
     description = request.get_json()['description']
+    parent_id = request.get_json()['parentId']
 
     error = False
     body = {}
     try:
-        todo = Todo(title=title, description=description, parent_list_id=1)
+        todo = Todo(title=title, description=description, parent_list_id=parent_id)
         db.session.add(todo)
         db.session.commit()
         body = {
@@ -125,7 +126,7 @@ def set_completed_todo(todo_id):
   return redirect(url_for('index'))
 
 @app.route('/<todolist_id>/set-completed-list', methods=['POST'])
-def set_completed_todo(todolist_id):
+def set_completed_todoList(todolist_id):
   try:
     completed = request.get_json()['completed']
     print('completed', completed)
@@ -151,7 +152,7 @@ def delete_todo(todo_id):
   return jsonify({'Success': True})
 
 @app.route('/todolists/<todolist_id>', methods=['DELETE'])
-def delete_todo(todolist_id):
+def delete_todoList(todolist_id):
   try:   
     todoList = TodoList.query.get(todolist_id)
     db.session.delete(todoList)

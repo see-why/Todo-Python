@@ -61,7 +61,7 @@
             <div class = "hidden" id = "error"> Something went wrong! </div>
             <div>
                 <h1>To-dos</h1>
-                <h2 data-id="{{active_list.id}}" id="parent=list-h2">{{active_list.name}}</h2>
+                <h2 data-id="{{active_list.id}}" id="parent-list-h2">{{active_list.name}}</h2>
                 <div id="todos">                   
                     {% for todo in todos %}
                     <ul>                        
@@ -203,7 +203,8 @@
                     method: 'POST',
                     body: JSON.stringify({
                         'title': document.getElementById('title').value,
-                        'description': document.getElementById('description').value
+                        'description': document.getElementById('description').value,
+                        'parentId': document.getElementById('parent-list-h2').dataset['id']
                     }),
                     headers: {
                         'Content-Type': 'application/json'
