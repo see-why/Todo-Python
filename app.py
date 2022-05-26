@@ -26,7 +26,7 @@ class TodoList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name =  db.Column(db.String(), nullable=False)
     completed = db.Column(db.Boolean, nullable=False, default=False)
-    todos = db.relationship('Todo', backref='parent_list', lazy=True)
+    todos = db.relationship('Todo', backref='parent_list', lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f'TodoList Name: {self.name} Todos: {self.todos}'
@@ -37,7 +37,7 @@ class TodoList(db.Model):
 def index():
     return redirect(url_for('get_list_todos', list_id=1))
 
-@app.route('/<list_id>')
+@app.route('/list/<list_id>')
 def get_list_todos(list_id):
     todos = Todo.query.filter_by(parent_list_id=list_id).order_by('id').all()
     todolists = TodoList.query.order_by('id').all()
