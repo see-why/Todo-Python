@@ -42,7 +42,7 @@
                <div id="todolists">
                    {% for todolist in todolists %}
                    <ul>                        
-                       <ol><a href="/{{todolist.id}}">{{todolist.name}}</a></ol>
+                       <ol><a href="/list/{{todolist.id}}">{{todolist.name}}</a></ol>
                        <li> <input class="check-list-completed" data-id="{{todolist.id}}" type="checkbox" {% if todolist.completed %} checked {% endif %} /></li>
                        <li><button type="button" data-id="{{todolist.id}}" class="delete-list-button">&cross;</button></li>
                    </ul>           
