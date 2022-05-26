@@ -107,17 +107,20 @@
                 }
             }
 
-            const list_buttons = document.querySelectorAll('.delete-list-buttons')
+            const list_buttons = document.querySelectorAll('.delete-list-button')
 
             const delete_function_list = (e) => {
                     const button = e.target
+                    console.log('button',button)
                     const id = button.dataset['id']
+                    console.log('id',id)
 
                     fetch(`/todolists/${id}`, {
                         method: 'DELETE'                       
                     }).then(() => {
                           document.getElementById('list-error').className = 'hidden';
-                          window.location.reload();
+                          //window.location.reload();
+                          history.go(0);
                         })
                         .catch((error) => {
                           document.getElementById('list-error').className = '';
@@ -199,106 +202,122 @@
             
             document.getElementById('form').onsubmit = (e) => {
                 e.preventDefault();
-                fetch('/create_with_json', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        'title': document.getElementById('title').value,
-                        'description': document.getElementById('description').value,
-                        'parentId': document.getElementById('parent-list-h2').dataset['id']
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then((response) => {
-                    return response.json()
-                }).then((jsonResponse) => {
-                    console.log(jsonResponse)
-                    div = document.getElementById('todos')
-                    ul = document.createElement('ul')
-                    ol = document.createElement('ol')
-                    li = document.createElement('li')
 
-                    ol.innerHTML = jsonResponse['title']
-                    input = document.createElement('input')
-                    input.type = 'checkbox'
-                    input.className = 'check-completed'
-                    input.dataset['id'] = jsonResponse['id']
-                    input.checked = jsonResponse['checked']
+                const title = document.getElementById('title').value
+                const description = document.getElementById('description').value
+                const parentId = document.getElementById('parent-list-h2').dataset['id']
 
-                    input.onchange = update_Completed(e)
+                if(title !== "" && description !== "" && parentId){
+                    fetch('/create_with_json', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            'title': title,
+                            'description': description,
+                            'parentId': parentId
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((response) => {
+                        return response.json()
+                    }).then((jsonResponse) => {
+                        console.log(jsonResponse)
+                        div = document.getElementById('todos')
+                        ul = document.createElement('ul')
+                        ol = document.createElement('ol')
+                        li = document.createElement('li')
 
-                    li.appendChild(input)
-                    li.innerHTML += ` ${jsonResponse['description']}`
-                    last_li = document.createElement('li')
-                    button = document.createElement('button')
-                    button.innerHTML = '&cross;'
-                    button.dataset['id'] = jsonResponse['id']
-                    button.className = 'delete-button'
-                    button.Type = 'button'
+                        ol.innerHTML = jsonResponse['title']
+                        input = document.createElement('input')
+                        input.type = 'checkbox'
+                        input.className = 'check-completed'
+                        input.dataset['id'] = jsonResponse['id']
+                        input.checked = jsonResponse['checked']
 
-                    button.onclick = delete_function(e)
+                        input.onchange = update_Completed(e)
 
-                    last_li.appendChild(button)
+                        li.appendChild(input)
+                        li.innerHTML += ` ${jsonResponse['description']}`
+                        last_li = document.createElement('li')
+                        button = document.createElement('button')
+                        button.innerHTML = '&cross;'
+                        button.dataset['id'] = jsonResponse['id']
+                        button.className = 'delete-button'
+                        button.Type = 'button'
 
-                    ul.append(ol,li,last_li)
+                        button.onclick = delete_function(e)
 
-                    div.appendChild(ul)
+                        last_li.appendChild(button)
 
-                }).catch((error) => {      
-                    console.log(error)              
-                    document.getElementById('error').className='';
-                });
+                        ul.append(ol,li,last_li)
+
+                        div.appendChild(ul)
+
+                    }).catch((error) => {      
+                        console.log(error)              
+                        document.getElementById('error').className='';
+                    });
+                }
             }
             
             document.getElementById('list-form').onsubmit = (e) => {
                 e.preventDefault();
-                fetch('/create/list', {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        'name': document.getElementById('name').value                       
-                    }),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }).then((response) => {
-                    return response.json()
-                }).then((jsonResponse) => {
-                    console.log(jsonResponse)
-                    div = document.getElementById('todolists')
-                    ul = document.createElement('ul')
-                    ol = document.createElement('ol')
-                    li = document.createElement('li')
+                const name = document.getElementById('name').value   
 
-                    ol.innerHTML = jsonResponse['name']
-                    input = document.createElement('input')
-                    input.type = 'checkbox'
-                    input.className = 'check-list-completed'
-                    input.dataset['id'] = jsonResponse['id']
-                    input.checked = jsonResponse['checked']
+                if(name !== ""){
+                    fetch('/create/list', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            'name': document.getElementById('name').value                       
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((response) => {
+                        return response.json()
+                    }).then((jsonResponse) => {
+                        console.log(jsonResponse)
+                        div = document.getElementById('todolists')
+                        ul = document.createElement('ul')
+                        ol = document.createElement('ol')
+                        li = document.createElement('li')
 
-                    input.onchange = update_Completed_list(e)
+                        a = document.createElement('a')
+                        a.href = `/${jsonResponse['id']}`
+                        a.innerHTML = jsonResponse['name']
 
-                    li.appendChild(input)
-                   
-                    last_li = document.createElement('li')
-                    button = document.createElement('button')
-                    button.innerHTML = '&cross;'
-                    button.dataset['id'] = jsonResponse['id']
-                    button.className = 'delete-list-button'
-                    button.Type = 'button'
+                        ol.appendChild(a)
 
-                    button.onclick = delete_function_list(e)
+                        input = document.createElement('input')
+                        input.type = 'checkbox'
+                        input.className = 'check-list-completed'
+                        input.dataset['id'] = jsonResponse['id']
+                        input.checked = jsonResponse['checked']
 
-                    last_li.appendChild(button)
+                        input.onchange = update_Completed_list(e)
 
-                    ul.append(ol,li,last_li)
+                        li.appendChild(input)
+                        
+                        last_li = document.createElement('li')
+                        button = document.createElement('button')
+                        button.innerHTML = '&cross;'
+                        button.dataset['id'] = jsonResponse['id']
+                        button.className = 'delete-list-button'
+                        button.Type = 'button'
 
-                    div.appendChild(ul)
+                        button.onclick = delete_function_list(e)
 
-                }).catch((error) => {      
-                    console.log(error)              
-                    document.getElementById('error').className='';
-                });
+                        last_li.appendChild(button)
+
+                        ul.append(ol,li,last_li)
+
+                        div.appendChild(ul)
+
+                    }).catch((error) => {      
+                        console.log(error)              
+                        document.getElementById('error').className='';
+                    });
+                }
             }
         </script>
     </body>
