@@ -39,8 +39,8 @@ def index():
 
 @app.route('/<list_id>')
 def get_list_todos(list_id):
-    todos = Todo.query.filter_by(parent_list_id=list_id).all()
-    todolists = TodoList.query.all()
+    todos = Todo.query.filter_by(parent_list_id=list_id).order_by('id').all()
+    todolists = TodoList.query.order_by('id').all()
     active_list = TodoList.query.get(list_id)
     return render_template('index.html', todolists=todolists, todos=todos, active_list=active_list)
 
