@@ -25,6 +25,7 @@ class TodoList(db.Model):
     __tablename__ = 'todolists'
     id = db.Column(db.Integer, primary_key=True)
     name =  db.Column(db.String(), nullable=False)
+    completed = db.Column(db.Boolean, nullable=False, default=False)
     todos = db.relationship('Todo', backref='parent_list', lazy=True)
 
     def __repr__(self):
@@ -83,6 +84,31 @@ def create_Todo():
     else:
         abort (400)
 
+@app.route('/create/list', methods=['POST'])
+def create_TodoList():
+    name = request.get_json()['name']  
+    error = False
+    body = {}
+    try:
+        todoList = TodoList(name=name)
+        db.session.add(todoList)
+        db.session.commit()
+        body = {
+            'id': todoList.id,
+            'name': todoList.name,
+            'checked': todoList.completed           
+        }
+    except:
+        db.session.rollback()
+        error=True
+        print(sys.exc_info())
+    finally:
+        db.session.close()
+
+    if not error:
+        return jsonify(body)
+    else:
+        abort (400)
 
 @app.route('/<todo_id>/set-completed', methods=['POST'])
 def set_completed_todo(todo_id):
