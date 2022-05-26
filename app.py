@@ -111,7 +111,7 @@ def create_TodoList():
     else:
         abort (400)
 
-@app.route('/<todo_id>/set-completed', methods=['POST'])
+@app.route('/list/<todo_id>/set-completed', methods=['POST'])
 def set_completed_todo(todo_id):
   try:
     completed = request.get_json()['completed']
@@ -125,7 +125,7 @@ def set_completed_todo(todo_id):
     db.session.close()
   return redirect(url_for('index'))
 
-@app.route('/<todolist_id>/set-completed-list', methods=['POST'])
+@app.route('/list/<todolist_id>/set-completed-list', methods=['POST'])
 def set_completed_todoList(todolist_id):
   try:
     completed = request.get_json()['completed']
