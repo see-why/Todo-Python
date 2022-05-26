@@ -36,10 +36,10 @@
     <body>
         <section id="todolist_section" class="todolist_section">
             <div>
-           <div class = "hidden" id = "error"> Something went wrong! </div>
+           <div class = "hidden" id = "list-error"> Something went wrong! </div>
            <div>
                <h1>To-do Lists</h1>
-               <div id="todos">
+               <div id="todolists">
                    {% for todolist in todolists %}
                    <ul>                        
                        <ol><a href="/{{todolist.id}}">{{todolist.name}}</a></ol>
@@ -50,8 +50,8 @@
                </div>
            </div>
             </div>
-            <form id="form" action="/create/list" method="post">
-               <input type="text" id="name" name="title"/>               
+            <form id="list-form" action="/create/list" method="post">
+               <input type="text" id="name" name="name"/>               
                <input type="submit" value="Save"/>
            </form>
        </section>      
@@ -107,8 +107,34 @@
                 }
             }
 
+            const list_buttons = document.querySelectorAll('.delete-list-buttons')
+
+            const delete_function_list = (e) => {
+                    const button = e.target
+                    const id = button.dataset['id']
+
+                    fetch(`/todolists/${id}`, {
+                        method: 'DELETE'                       
+                    }).then(() => {
+                          document.getElementById('list-error').className = 'hidden';
+                          window.location.reload();
+                        })
+                        .catch((error) => {
+                          document.getElementById('list-error').className = '';
+                          console.log(error)
+                        })
+            }
+
+            for (var i = 0; i < list_buttons.length; i++){
+                b = list_buttons[i];
+
+                b.onclick = (e) => {
+                    delete_function_list(e)
+                }
+            }
+
             const update_Completed = (e) => {
-                const checkbox = e.target
+                        const checkbox = e.target
                         const check = checkbox.checked                        
                         console.log('id',checkbox.dataset['id'])
 
@@ -129,6 +155,28 @@
                         })
             }
 
+            const update_Completed_list = (e) => {
+                        const checkbox = e.target
+                        const check = checkbox.checked                        
+                        console.log('id',checkbox.dataset['id'])
+
+                        fetch(`${checkbox.dataset['id']}/set-completed-list`, {
+                            method: 'POST',
+                            body: JSON.stringify({
+                                'completed': check
+                            }),
+                            headers: {
+                                'Content-Type': 'application/json'
+                            } 
+                        }).then(() => {
+                          document.getElementById('list-error').className = 'hidden';
+                        })
+                        .catch((error) => {
+                          document.getElementById('list-error').className = '';
+                          console.log(error)
+                        })
+            }
+
             todos = document.querySelectorAll('.check-completed')
             
             for (var i=0; i<todos.length; i++){
@@ -138,8 +186,17 @@
                        update_Completed(e)
                     }
                 }
+            
+            todoLists = document.querySelectorAll('.check-list-completed')
 
-
+            for (var i=0; i<todoLists.length; i++){
+                    t = todoLists[i]
+                    
+                    t.onchange = (e) => {
+                        update_Completed_list(e)
+                    }
+                }
+            
             document.getElementById('form').onsubmit = (e) => {
                 e.preventDefault();
                 fetch('/create_with_json', {
@@ -192,6 +249,56 @@
                 });
             }
             
+            document.getElementById('list-form').onsubmit = (e) => {
+                e.preventDefault();
+                fetch('/create/list', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        'name': document.getElementById('name').value                       
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then((response) => {
+                    return response.json()
+                }).then((jsonResponse) => {
+                    console.log(jsonResponse)
+                    div = document.getElementById('todolists')
+                    ul = document.createElement('ul')
+                    ol = document.createElement('ol')
+                    li = document.createElement('li')
+
+                    ol.innerHTML = jsonResponse['name']
+                    input = document.createElement('input')
+                    input.type = 'checkbox'
+                    input.className = 'check-list-completed'
+                    input.dataset['id'] = jsonResponse['id']
+                    input.checked = jsonResponse['checked']
+
+                    input.onchange = update_Completed_list(e)
+
+                    li.appendChild(input)
+                   
+                    last_li = document.createElement('li')
+                    button = document.createElement('button')
+                    button.innerHTML = '&cross;'
+                    button.dataset['id'] = jsonResponse['id']
+                    button.className = 'delete-list-button'
+                    button.Type = 'button'
+
+                    button.onclick = delete_function_list(e)
+
+                    last_li.appendChild(button)
+
+                    ul.append(ol,li,last_li)
+
+                    div.appendChild(ul)
+
+                }).catch((error) => {      
+                    console.log(error)              
+                    document.getElementById('error').className='';
+                });
+            }
         </script>
     </body>
     </html>       
